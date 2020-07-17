@@ -1,0 +1,45 @@
+<html>
+<head>
+  <script src=' https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+  <style>
+    #messages {
+      height: 300px;
+      width: 300px;
+      overflow: hidden;
+      border: #ccc solid 1px;
+    }
+
+    section {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h1>Chat Client #1</h1>
+    <div id="messages"></div>
+    <textarea rows="2" cols="35" id="chat"></textarea>
+    <input type='button' value='Chat' id='fire' />
+    <script src='/faye/client.js'></script>
+    <script>
+      var $chat = $('#chat');
+      var client = new Faye.Client('/faye');
+      $('#fire').on('click', null, function () {
+        var publication = client.publish('/channel', { text: 'Client 1: ' + $chat.val() });
+
+        publication.then(function () {
+          console.log('Message received by server!');
+        }, function (error) {
+          alert('There was a problem: ' + error.message);
+        });
+
+        $chat.val('');
+      });
+
+      client.subscribe('/channel', function (message) {
+        $('#messages').append('<p>' + message.text + '</p>');
+      });
+    </script>
+  </section>
+</body>
+</html>
