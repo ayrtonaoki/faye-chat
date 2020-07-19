@@ -13,29 +13,33 @@
       margin-left: 20px;
     }
   </style>
+
+  <script src='/faye/client.js'></script>
 </head>
 <body>
   <section>
     <h1>Chat Client #1</h1>
     <div id="messages"></div>
     <textarea rows="2" cols="35" id="chat"></textarea>
-    <input type='button' value='Chat' id='fire' />
-    <script src='/faye/client.js'></script>
     <script>
       var $chat = $('#chat');
       var client = new Faye.Client('/faye');
-      $('#fire').on('click', null, function () {
-        var publication = client.publish('/channel', { text: 'Client 1: ' + $chat.val() });
+      // $('#fire').on('click', null, function () { Send message with click
+      $(document).keypress(function (e) {
+        if (e.which == 13) {
+          var publication = client.publish('/channel', { text: 'Client 1: ' + $chat.val() });
 
-        publication.then(function () {
-          console.log('Message received by server!');
-        }, function (error) {
-          alert('There was a problem: ' + error.message);
-        });
+          publication.then(function () {
+            console.log('Message received by server!');
+          }, function (error) {
+            alert('There was a problem: ' + error.message);
+          });
 
-        $chat.val('');
+          $chat.val('');
+
+          return false;
+        }
       });
-
       client.subscribe('/channel', function (message) {
         $('#messages').append('<p>' + message.text + '</p>');
       });
