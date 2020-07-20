@@ -15,6 +15,7 @@
     crossorigin="anonymous"></script>
 </head>
 <body>
+
   <div class="container">
     <div class="input-group mt-3 mb-3">
       <div class="input-group-prepend">
@@ -26,9 +27,34 @@
     <div class="col-md-5" id="messages"></div>
     <div class="input-group">
       <textarea class="form-control col-md-6" rows="5" aria-label="With textarea" id="chat"
-        placeholder="Type and press ENTER to send..."></textarea>
+        placeholder="Type and press ENTER to send...">
+      </textarea>
     </div>
   </div>
-  <script src="client.js"></script>
+  <script>
+    var $name = $("#name");
+    var $chat = $('#chat').prop("disabled", true);
+    var client = new Faye.Client('/faye');
+
+    $(document).keyup(function (e) {
+      if ($name.val() == "") $chat.prop("disabled", true)
+      else if ($name.val() != "") $chat.prop("disabled", false);
+      if (e.which == 13) {
+        var publication = client.publish('/channel', { text: $name.val() + ": " + $chat.val() });
+
+        publication.then(function () {
+          console.log('Message received by server!');
+        }, function (error) {
+          alert('There was a problem: ' + error.message);
+        });
+        $chat.val('');
+        return false;
+      }
+    });
+
+    client.subscribe('/channel', function (message) {
+      $('#messages').append('<p>' + message.text + '</p>');
+    });
+  </script>
 </body>
 </html>
