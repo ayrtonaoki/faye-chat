@@ -15,12 +15,20 @@
     crossorigin="anonymous"></script>
 </head>
 <body>
-  <section>
-    <label>Name: </label>
-    <input type="text" id="name">
-    <div id="messages"></div>
-    <textarea rows="2" cols="35" id="chat"></textarea>
-    <script src="client.js"></script>
-  </section>
+  <div class="container">
+    <div class="input-group mt-3 mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">@</span>
+      </div>
+      <input type="text" class="form-control col-md-3" placeholder="Username" aria-label="Username"
+        aria-describedby="basic-addon1" id="name">
+    </div>
+    <div class="col-md-5" id="messages"></div>
+    <div class="input-group">
+      <textarea class="form-control col-md-6" rows="5" aria-label="With textarea" id="chat"
+        placeholder="Type and press ENTER to send..."></textarea>
+    </div>
+  </div>
+  <script src="client.js"></script>
 </body>
 </html>
