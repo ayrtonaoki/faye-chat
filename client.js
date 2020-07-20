@@ -6,7 +6,7 @@ $(document).keyup(function (e) {
   if ($name.val() == "") $chat.prop("disabled", true)
   else if ($name.val() != "") $chat.prop("disabled", false);
   if (e.which == 13) {
-    var publication = client.publish('/channel', { text: $name.val() + ": " + $chat.val() });
+    var publication = client.publish('/channel', { text: $chat.val() });
 
     publication.then(function () {
       console.log('Message received by server!');
@@ -19,5 +19,5 @@ $(document).keyup(function (e) {
 });
 
 client.subscribe('/channel', function (message) {
-  $('#messages').append('<p>' + message.text + '</p>');
+  $('#messages').append('<p>' + '<b>' + $name.val() + ": " + '</b>' + message.text + '</p>');
 });
