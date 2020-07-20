@@ -2,7 +2,6 @@ var $name = $("#name");
 var $chat = $('#chat').prop("disabled", true);
 var client = new Faye.Client('/faye');
 
-// $('#fire').on('click', null, function () { Send message with click
 $(document).keyup(function (e) {
   if ($name.val() == "") $chat.prop("disabled", true)
   else if ($name.val() != "") $chat.prop("disabled", false);
